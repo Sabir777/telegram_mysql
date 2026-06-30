@@ -71,8 +71,8 @@ CREATE TABLE private_messages(
     FOREIGN KEY (reply_to_id) REFERENCES private_messages(id)
 );
 
-DROP TABLE IF EXISTS groups;
-CREATE TABLE groups (
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
     id SERIAL,
     title VARCHAR(45),
     icon VARCHAR(45),
@@ -93,7 +93,7 @@ CREATE TABLE group_members (
     created_at DATETIME DEFAULT NOW(),
     
     FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (group_id) REFERENCES groups (id)
+    FOREIGN KEY (group_id) REFERENCES `groups` (id)
 );
 
 DROP TABLE IF EXISTS group_messages;
@@ -108,7 +108,7 @@ CREATE TABLE group_messages (
     created_at DATETIME DEFAULT NOW(),
     
     FOREIGN KEY (sender_id) REFERENCES users (id),
-    FOREIGN KEY (group_id) REFERENCES groups (id),
+    FOREIGN KEY (group_id) REFERENCES `groups` (id),
     FOREIGN KEY (reply_to_id) REFERENCES group_messages (id)
 );
 
