@@ -1,6 +1,3 @@
--- DDL
--- CREATE, ALTER, DROP
-
 DROP DATABASE IF EXISTS telegram;
 CREATE SCHEMA telegram;
 USE telegram;
@@ -54,28 +51,28 @@ CREATE TABLE media_types(
 );*/
 
 # 1 x M
-DROP TABLE IF EXISTS `private_messages`;
-CREATE TABLE `private_messages`(
-    `id` SERIAL,
-    `sender_id` BIGINT UNSIGNED NOT NULL,
-    `receiver_id` BIGINT UNSIGNED NOT NULL,
-    `reply_to_id` BIGINT UNSIGNED NULL,
-    `media_type` ENUM('text', 'image', 'audio', 'video'),
+DROP TABLE IF EXISTS private_messages;
+CREATE TABLE private_messages(
+    id SERIAL,
+    sender_id BIGINT UNSIGNED NOT NULL,
+    receiver_id BIGINT UNSIGNED NOT NULL,
+    reply_to_id BIGINT UNSIGNED NULL,
+    media_type ENUM('text', 'image', 'audio', 'video'),
     # media_type_id BIGINT UNSIGNED NOT NULL
     # body VARCHAR(), # limit 65535
-    `body` TEXT,
+    body TEXT,
     # file BLOB
-    `filename` VARCHAR(200),
-    `created_at` DATETIME DEFAULT NOW(),
+    filename VARCHAR(200),
+    created_at DATETIME DEFAULT NOW(),
     
-    # PRIMARY KEY (`id`),
+    # PRIMARY KEY (id),
     FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (receiver_id) REFERENCES users(id),
     FOREIGN KEY (reply_to_id) REFERENCES private_messages(id)
 );
 
-DROP TABLE IF EXISTS `groups`;
-CREATE TABLE `groups` (
+DROP TABLE IF EXISTS groups;
+CREATE TABLE groups (
     id SERIAL,
     title VARCHAR(45),
     icon VARCHAR(45),
@@ -88,19 +85,19 @@ CREATE TABLE `groups` (
     FOREIGN KEY (owner_user_id) REFERENCES users (id)
 );
 
-DROP TABLE IF EXISTS `group_members`;
-CREATE TABLE `group_members` (
-    `id` SERIAL,
-    `group_id` BIGINT UNSIGNED NOT NULL,
-    `user_id` BIGINT UNSIGNED NOT NULL,
-    `created_at` DATETIME DEFAULT NOW(),
+DROP TABLE IF EXISTS group_members;
+CREATE TABLE group_members (
+    id SERIAL,
+    group_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME DEFAULT NOW(),
     
     FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (group_id) REFERENCES `groups` (id)
+    FOREIGN KEY (group_id) REFERENCES groups (id)
 );
 
-DROP TABLE IF EXISTS `group_messages`;
-CREATE TABLE `group_messages` (
+DROP TABLE IF EXISTS group_messages;
+CREATE TABLE group_messages (
     id SERIAL,
     group_id BIGINT UNSIGNED NOT NULL,
     sender_id BIGINT UNSIGNED NOT NULL,
@@ -111,7 +108,7 @@ CREATE TABLE `group_messages` (
     created_at DATETIME DEFAULT NOW(),
     
     FOREIGN KEY (sender_id) REFERENCES users (id),
-    FOREIGN KEY (group_id) REFERENCES `groups` (id),
+    FOREIGN KEY (group_id) REFERENCES groups (id),
     FOREIGN KEY (reply_to_id) REFERENCES group_messages (id)
 );
 
@@ -156,7 +153,7 @@ CREATE TABLE channel_messages (
     created_at DATETIME DEFAULT NOW(),
     
     FOREIGN KEY (sender_id) REFERENCES users (id),
-    FOREIGN KEY (channel_id) REFERENCES `channels` (id)
+    FOREIGN KEY (channel_id) REFERENCES channels (id)
 );
 
 DROP TABLE IF EXISTS saved_messages;
